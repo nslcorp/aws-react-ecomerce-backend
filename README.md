@@ -1,1 +1,1 @@
-# aws-react-ecomerce-backend
+# aws-react-shop-backend
