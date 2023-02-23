@@ -1,3 +1,10 @@
+
+
+POST - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/hello
+GET - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/getProductsList
+GET - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/getProductsById/{productId}
+
+
 # Serverless - AWS Node.js Typescript
 
 This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
