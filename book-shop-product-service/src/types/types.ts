@@ -4,5 +4,6 @@ export interface Book {
   title: String,
   description: String,
   price: number,
-  genre: String
+  genre: String,
+  img: String
 }

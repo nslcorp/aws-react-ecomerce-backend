@@ -17,7 +17,7 @@ const getProductsById: ValidatedEventAPIGatewayProxyEvent<void> = async (event) 
     return formatJSONResponse({message: `There is no book with ID:${id}`})
   }
 
-  return formatJSONResponse({data: book});
+  return formatJSONResponse(book);
 };
 
 export const main = middyfy(getProductsById);
