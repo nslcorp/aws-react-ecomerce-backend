@@ -3,7 +3,7 @@ import { Book } from '../types/types';
 export const BOOKS_MOCK: Book[] = [
   {
     id: "1",
-    author: 'Agatha Christie: with http-cors',
+    author: 'Agatha Christie',
     title: 'Murder on the Orient Express',
     description: 'The classic, the best. Nobody does it better than Dame Agatha, who wrote in her autobiography, “To travel by train is to see nature and human beings, towns and churches and rivers - in fact, to see life."',
     genre: 'detective',
