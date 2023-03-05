@@ -1,9 +1,0 @@
-{
-  "httpMethod": "GET",
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "pathParameters": {
-    "productId": "1"
-  }
-}

@@ -70,35 +70,39 @@
     }
   },
   "definitions": {
-    "Book": {
+    "Product": {
       "properties": {
         "id": {
           "$ref": "#/definitions/String",
-          "title": "Book.id"
+          "title": "Product.id"
         },
         "author": {
           "$ref": "#/definitions/String",
-          "title": "Book.author"
+          "title": "Product.author"
         },
         "title": {
           "$ref": "#/definitions/String",
-          "title": "Book.title"
+          "title": "Product.title"
         },
         "description": {
           "$ref": "#/definitions/String",
-          "title": "Book.description"
-        },
-        "price": {
-          "title": "Book.price",
-          "type": "number"
+          "title": "Product.description"
         },
         "genre": {
           "$ref": "#/definitions/String",
-          "title": "Book.genre"
+          "title": "Product.genre"
         },
         "img": {
           "$ref": "#/definitions/String",
-          "title": "Book.img"
+          "title": "Product.img"
+        },
+        "price": {
+          "$ref": "#/definitions/Number",
+          "title": "Product.price"
+        },
+        "count": {
+          "$ref": "#/definitions/Number",
+          "title": "Product.count"
         }
       },
       "required": [
@@ -106,12 +110,38 @@
         "author",
         "title",
         "description",
-        "price",
         "genre",
-        "img"
+        "img",
+        "price",
+        "count"
       ],
       "additionalProperties": false,
-      "title": "Book",
+      "title": "Product",
+      "type": "object"
+    },
+    "NewProductPayload": {
+      "title": "NewProductPayload"
+    },
+    "ProductDynamoSchema": {
+      "title": "ProductDynamoSchema"
+    },
+    "Stock": {
+      "properties": {
+        "productId": {
+          "$ref": "#/definitions/String",
+          "title": "Stock.productId"
+        },
+        "count": {
+          "$ref": "#/definitions/Number",
+          "title": "Stock.count"
+        }
+      },
+      "required": [
+        "productId",
+        "count"
+      ],
+      "additionalProperties": false,
+      "title": "Stock",
       "type": "object"
     }
   },

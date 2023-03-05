@@ -19,6 +19,14 @@ DONE: POST /products lambda functions returns error 400 status code if product d
 DONE: All lambdas return error 500 status code on any error (DB connection, any unhandled error in code)
 DONE: All lambdas do console.log for each incoming requests and their arguments
 
+endpoints:
+GET - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/products
+GET - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/products/{productId}
+POST - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/products
+GET - https://41kei45u2m.execute-api.eu-central-1.amazonaws.com/swagger
+GET - https://41kei45u2m.execute-api.eu-central-1.amazonaws.com/swagger.json
+
+
 
 
 # Serverless - AWS Node.js Typescript

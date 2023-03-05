@@ -44,7 +44,6 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       TABLE_PRODUCTS: process.env.TABLE_PRODUCTS,
       TABLE_STOCKS: process.env.TABLE_STOCKS,
-      AWS_REGION: process.env.AWS_REGION,
     },
     iam: {
       role: "arn:aws:iam::663503730313:role/DynamoDB-full-access-role"

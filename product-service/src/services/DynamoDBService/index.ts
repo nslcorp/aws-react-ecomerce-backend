@@ -1,4 +1,5 @@
 import { BOOKS_MOCK } from 'src/mock/books.mock';
+import { getProductByID } from 'src/services/DynamoDBService/handlers/getProductByID';
 import { getProducts } from 'src/services/DynamoDBService/handlers/getProducts';
 import { getStocks } from 'src/services/DynamoDBService/handlers/getStocks';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,7 +32,8 @@ class DynamoDBService {
     ])
   }
 
-  getProductByID = () => {
+  getProductByID = async (id: string) => {
+    return await getProductByID(id)
   }
 
   initialDataUpload = async () => {

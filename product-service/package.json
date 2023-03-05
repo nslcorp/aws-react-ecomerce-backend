@@ -5,6 +5,7 @@
   "main": "serverless.ts",
   "scripts": {
     "start": "serverless offline",
+    "deploy": "serverless deploy --verbose",
     "bootstrap:initialUpload": "ts-node src/bootstrap/initialDataUpload.ts"
   },
   "engines": {
