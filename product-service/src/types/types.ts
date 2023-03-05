@@ -7,3 +7,21 @@ export interface Book {
   genre: String,
   img: String
 }
+
+// Product
+export interface Product {
+  id: String
+  title: String,
+  description: String,
+  price: Number,
+  count: Number
+}
+
+export type NewProductPayload = Omit<Product, 'id'>
+export type ProductDynamoSchema= Omit<Product, 'count'>
+
+//Stock
+export interface Stock {
+  productId: String,
+  count: Number
+}
