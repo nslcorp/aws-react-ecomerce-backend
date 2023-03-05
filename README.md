@@ -7,6 +7,8 @@
 ##### Swagger URL:  
 ```https://41kei45u2m.execute-api.eu-central-1.amazonaws.com/swagger```
 
+##### Client URL:
+```https://d1pcilzlaus1qs.cloudfront.net```
 
 ## service-2
 ...

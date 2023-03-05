@@ -1,20 +1,16 @@
-import { DynamoDB } from 'aws-sdk';
-import { DataBaseError } from '../../../errors/DataBaseError';
-import { NewProductPayload, ProductDynamoSchema } from '../../../types/types';
+import { DataBaseError } from 'src/errors/DataBaseError';
+import { dynamodbClient } from 'src/services/DynamoDBService/handlers/shared/dynamodbClient';
+import { NewProductPayload, ProductDynamoSchema } from 'src/types/types';
 
-const dynamodb = new DynamoDB.DocumentClient();
 
 export const createProduct = async (data: NewProductPayload, productId: string) => {
   try {
     const product: ProductDynamoSchema = {
       id: productId,
-      title: data.title,
-      description: data.description,
-      price: data.price
+      ...data
     }
-    console.log('createProduct', product)
 
-    return await dynamodb.put({
+    return await dynamodbClient.put({
       TableName: process.env.TABLE_PRODUCTS,
       Item: product
     }).promise()

@@ -9,6 +9,25 @@ const serverlessConfiguration: AWS = {
   service: 'book-shop-product-service',
   frameworkVersion: '3',
   plugins: ['serverless-auto-swagger', 'serverless-esbuild', 'serverless-offline'],
+
+  custom: {
+    esbuild: {
+      bundle: true,
+      minify: false,
+      sourcemap: true,
+      exclude: ['aws-sdk'],
+      target: 'node14',
+      define: { 'require.resolve': undefined },
+      platform: 'node',
+      concurrency: 10,
+    },
+    autoswagger: {
+      basePath: '/dev',
+      host: '6obctl4bmf.execute-api.eu-central-1.amazonaws.com',
+      typefiles: ['./src/types/types.ts'],
+    }
+  },
+
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -23,8 +42,9 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      TABLE_PRODUCTS: process.env.DYNAMODB_TABLE_PRODUCTS,
-      TABLE_STOCKS: process.env.DYNAMODB_TABLE_STOCKS,
+      TABLE_PRODUCTS: process.env.TABLE_PRODUCTS,
+      TABLE_STOCKS: process.env.TABLE_STOCKS,
+      AWS_REGION: process.env.AWS_REGION,
     },
     iam: {
       role: "arn:aws:iam::663503730313:role/DynamoDB-full-access-role"
@@ -43,23 +63,7 @@ const serverlessConfiguration: AWS = {
   //   }
   // },
   package: { individually: true },
-  custom: {
-    esbuild: {
-      bundle: true,
-      minify: false,
-      sourcemap: true,
-      exclude: ['aws-sdk'],
-      target: 'node14',
-      define: { 'require.resolve': undefined },
-      platform: 'node',
-      concurrency: 10,
-    },
-    autoswagger: {
-      basePath: '/dev',
-      host: '6obctl4bmf.execute-api.eu-central-1.amazonaws.com',
-      typefiles: ['./src/types/types.ts'],
-    }
-  },
+
 };
 
 module.exports = serverlessConfiguration;

@@ -3,11 +3,10 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import BaseError from 'src/errors/BaseError';
-import mongodbService from 'src/services/db-service';
+import mongodbService from 'src/services/DynamoDBService';
 
 
 const createProduct: ValidatedEventAPIGatewayProxyEvent<void> = async (event: APIGatewayProxyEventBase<any>) => {
-  // const data = await dynamodb.scan({TableName: 'book-shop-products'}).promise();
   if (!event.body) {
     const data = {message: 'Body was not provided'}
     return formatJSONResponse(data, 400);

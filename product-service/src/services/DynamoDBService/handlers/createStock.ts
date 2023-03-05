@@ -1,8 +1,7 @@
-import { DynamoDB } from 'aws-sdk';
-import { DataBaseError } from '../../../errors/DataBaseError';
-import { NewProductPayload, Stock } from '../../../types/types';
+import { DataBaseError } from 'src/errors/DataBaseError';
+import { dynamodbClient } from 'src/services/DynamoDBService/handlers/shared/dynamodbClient';
+import { NewProductPayload, Stock } from 'src/types/types';
 
-const dynamodb = new DynamoDB.DocumentClient();
 
 export const createStock = async (data: NewProductPayload, productId: string) => {
   const stock: Stock = {
@@ -11,7 +10,7 @@ export const createStock = async (data: NewProductPayload, productId: string) =>
   }
 
   try {
-    await dynamodb.put({
+    await dynamodbClient.put({
       TableName: process.env.TABLE_STOCKS,
       Item: stock
     }).promise()
