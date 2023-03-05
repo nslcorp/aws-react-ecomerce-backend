@@ -1,16 +1,24 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { BOOKS_MOCK } from '../../mock/books.mock';
+
+import { DynamoDB } from 'aws-sdk';
+const dynamodb = new DynamoDB.DocumentClient();
 
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<void> = async () => {
+  console.log(process.env.TABLE_PRODUCTS)
   try {
-    return formatJSONResponse(BOOKS_MOCK);
+    const data = await dynamodb.scan({TableName: process.env.TABLE_PRODUCTS}).promise();
+    console.log(data)
+    return formatJSONResponse(data);
 
   } catch (error) {
-    console.error(error);
+    if(error.message){
+      return formatJSONResponse({message: error.message}, 400);
+    }
     const data = {message: 'Unhundled server error. See logs', error}
-    return formatJSONResponse(data, 500);
+    console.error(error);
+    return formatJSONResponse(data, 400);
   }
 };
 
