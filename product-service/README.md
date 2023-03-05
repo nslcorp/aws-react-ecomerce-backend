@@ -1,31 +1,4 @@
 
-DONE: task 4.1.1 ==> created two tables: products & stocks
-DONE: task 4.1.2 ==> write a script to fill tables with test examples
-
-DONE: task 4.2.1 ==> extend your serverless.yml file with data about your database
-DONE: task 4.2.2 ==> integrate the getProductsList lambda with database
-
-IN PROGRESS: task 4.2.3 ==> productID implement a Product model on FE side
-IN PROGRESS: task 4.2.4 ==> integrate the getProductsById lambda with database
-
-DONE: task 4.3.1 ==> create a lambda function called createProduct
-DONE: task 4.3.2 ==> createProduct lambda connect with POST /products
-DONE: task 4.3.3 ==> logic implemented
-
-DONE: task 4.4==> commit all your work
-
-Additional:
-DONE: POST /products lambda functions returns error 400 status code if product data is invalid
-DONE: All lambdas return error 500 status code on any error (DB connection, any unhandled error in code)
-DONE: All lambdas do console.log for each incoming requests and their arguments
-
-endpoints:
-GET - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/products
-GET - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/products/{productId}
-POST - https://6obctl4bmf.execute-api.eu-central-1.amazonaws.com/dev/products
-GET - https://41kei45u2m.execute-api.eu-central-1.amazonaws.com/swagger
-GET - https://41kei45u2m.execute-api.eu-central-1.amazonaws.com/swagger.json
-
 
 
 
