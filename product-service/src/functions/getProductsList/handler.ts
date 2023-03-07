@@ -1,16 +1,21 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { BOOKS_MOCK } from '../../mock/books.mock';
+
+import DbService from 'src/services/DynamoDBService';
 
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<void> = async () => {
   try {
-    return formatJSONResponse(BOOKS_MOCK);
+    const data = await DbService.getAllProducts();
+    return formatJSONResponse(data);
 
   } catch (error) {
-    console.error(error);
+    if (error.message) {
+      return formatJSONResponse({message: error.message}, 400);
+    }
     const data = {message: 'Unhundled server error. See logs', error}
-    return formatJSONResponse(data, 500);
+    console.error(error);
+    return formatJSONResponse(data, 400);
   }
 };
 

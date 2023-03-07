@@ -1,7 +1,7 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { BOOKS_MOCK } from '../../mock/books.mock';
+import DynamoDBService from 'src/services/DynamoDBService';
 
 
 const getProductsById: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
@@ -12,12 +12,12 @@ const getProductsById: ValidatedEventAPIGatewayProxyEvent<void> = async (event) 
 
 
   // logic of fetching products from DB | service | api or mock (current)
-  const book = BOOKS_MOCK.find(record => record.id === id)
-  if (!book) {
+  const product = await DynamoDBService.getProductByID(id)
+  if (!product) {
     return formatJSONResponse({message: `There is no book with ID:${id}`}, 400)
   }
 
-  return formatJSONResponse(book);
+  return formatJSONResponse(product);
 };
 
 export const main = middyfy(getProductsById);
