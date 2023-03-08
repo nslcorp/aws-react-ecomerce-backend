@@ -4,6 +4,21 @@ This project has been generated using the `aws-nodejs-typescript` template from 
 
 For detailed instructions, please refer to the [documentation](https://www.serverless.com/framework/docs/providers/aws/).
 
+DONE: task 5.1 ==> Create a new service called import-service and configure folder at S3
+
+NOT DONE: task 5.2 ==> create lambda `importProductsFile` and handle Signed URL
+NOT DONE: task 5.3 ==> create lambda importFileParser and parse file
+NOT DONE: task 5.4 ==> create MR, commit all code
+
+
+Additional:
+NOT DONE: async/await is used in lambda functions
+
+
+
+
+
+
 ## Installation/deployment instructions
 
 Depending on your preferred package manager, follow the instructions below to deploy your project.
