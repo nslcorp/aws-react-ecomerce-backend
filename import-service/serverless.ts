@@ -19,13 +19,17 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
+    autoswagger: {
+      basePath: '/dev',
+      host: 'https://w1dhud1cml.execute-api.eu-central-1.amazonaws.com',
+    },
   },
 
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
     region: 'eu-central-1',
-    deploymentMethod: "direct",
+    deploymentMethod: 'direct',
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -54,7 +58,6 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: { importProductsFile, importFileParser },
   package: { individually: true },
-
 };
 
 module.exports = serverlessConfiguration;

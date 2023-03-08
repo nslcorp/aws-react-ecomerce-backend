@@ -1,6 +1,5 @@
 import { handlerPath } from '@libs/handler-resolver';
 
-
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
@@ -8,11 +7,9 @@ export default {
       s3: {
         bucket: 'book-shop-import-service-bucket',
         event: 's3:ObjectCreated:*',
-        rules: [
-          {prefix: 'uploaded/'}
-        ],
-        existing: true
-      }
-    }
+        rules: [{ prefix: 'uploaded/' }],
+        existing: true,
+      },
+    },
   ],
 };
