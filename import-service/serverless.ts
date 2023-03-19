@@ -7,7 +7,7 @@ const serverlessConfiguration: AWS = {
   service: 'book-shop-import-service',
   frameworkVersion: '3',
   plugins: ['serverless-auto-swagger', 'serverless-esbuild', 'serverless-offline'],
-
+  useDotenv: true,
   custom: {
     esbuild: {
       bundle: true,
@@ -41,6 +41,7 @@ const serverlessConfiguration: AWS = {
       BUCKET_NAME: 'book-shop-import-service-bucket',
       UPLOAD_FOLDER: 'uploaded',
       PARSED_FOLDER: 'parsed',
+      SQS_URL: '${env:SQS_URL}',
     },
     iamRoleStatements: [
       {
@@ -52,6 +53,11 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: ['s3:*'],
         Resource: ['arn:aws:s3:::book-shop-import-service-bucket/*'],
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: '${env:SQS_ARN}',
       },
     ],
   },
