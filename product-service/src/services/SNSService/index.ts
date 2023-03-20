@@ -1,7 +1,7 @@
 import { NewProductPayload } from "src/types/types";
 import { SNS } from "aws-sdk";
 
-const sns = new SNS();
+export const sns = new SNS();
 
 class SNSService {
   sendNotifyMessage = async (product: NewProductPayload) => {

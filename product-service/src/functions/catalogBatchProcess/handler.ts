@@ -25,7 +25,7 @@ const catalogBatchProcess = async (event: SQSEvent) => {
         count: Number(count.trim()),
       };
 
-      console.log("NewProduct to be created", newProduct);
+      console.log({message: "NewProduct to be created", payload: newProduct});
 
       await mongodbService.createProduct(newProduct);
 
