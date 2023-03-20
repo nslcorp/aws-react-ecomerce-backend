@@ -1,15 +1,13 @@
-import * as dotenv from 'dotenv';
 import type { AWS } from "@serverless/typescript";
 import getProductsList from "@functions/getProductsList";
 import getProductsById from "@functions/getProductsById";
 import createProduct from "@functions/createProduct";
 import catalogBatchProcess from "@functions/catalogBatchProcess";
 
-dotenv.config();
 
 const serverlessConfiguration: AWS = {
   service: "book-shop-product-service",
-  // useDotenv: true,
+  useDotenv: true,
   frameworkVersion: "3",
   plugins: [
     "serverless-auto-swagger",
@@ -48,8 +46,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
-      TABLE_PRODUCTS: process.env.TABLE_PRODUCTS,
-      TABLE_STOCKS: process.env.TABLE_STOCKS,
+      TABLE_PRODUCTS: "${env:TABLE_PRODUCTS}",
+      TABLE_STOCKS: "${env:TABLE_STOCKS}",
       SNS_TOPIC_ARN: { Ref: "createProductTopic" },
     },
     iam: {
@@ -98,7 +96,7 @@ const serverlessConfiguration: AWS = {
       createProductSubscription: {
         Type: "AWS::SNS::Subscription",
         Properties: {
-          Endpoint: "serhii_nikitin@epam.com",
+          Endpoint: "${env:EMAIL_USER_TO_BE_NOTIFIED_1}",
           Protocol: "email",
           TopicArn: { Ref: "createProductTopic" },
         },

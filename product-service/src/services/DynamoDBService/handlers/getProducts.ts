@@ -3,6 +3,7 @@ import { dynamodbClient } from 'src/services/DynamoDBService/handlers/shared/dyn
 import { ProductDynamoSchema } from 'src/types/types';
 
 export const getProducts = async (): Promise<ProductDynamoSchema[]> => {
+  console.log(process.env.TABLE_PRODUCTS)
   try {
     const data = await dynamodbClient.scan({
       TableName: process.env.TABLE_PRODUCTS,
