@@ -4,7 +4,6 @@ import getProductsById from "@functions/getProductsById";
 import createProduct from "@functions/createProduct";
 import catalogBatchProcess from "@functions/catalogBatchProcess";
 
-
 const serverlessConfiguration: AWS = {
   service: "book-shop-product-service",
   useDotenv: true,
@@ -99,6 +98,17 @@ const serverlessConfiguration: AWS = {
           Endpoint: "${env:EMAIL_USER_TO_BE_NOTIFIED_1}",
           Protocol: "email",
           TopicArn: { Ref: "createProductTopic" },
+        },
+      },
+      createProductSubscriptionLowPrice: {
+        Type: "AWS::SNS::Subscription",
+        Properties: {
+          Endpoint: "${env:EMAIL_USER_TO_BE_NOTIFIED_2}",
+          Protocol: "email",
+          TopicArn: { Ref: "createProductTopic" },
+          FilterPolicy: {
+            price: [{ numeric: ["<=", 10] }],
+          },
         },
       },
     },

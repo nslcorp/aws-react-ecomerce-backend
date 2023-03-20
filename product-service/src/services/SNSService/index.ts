@@ -14,6 +14,12 @@ class SNSService {
         TopicArn: process.env.SNS_TOPIC_ARN,
         Message: JSON.stringify(message),
         Subject: "Notification from catalogBatchProcess lambda",
+        MessageAttributes: {
+          price: {
+            DataType: 'Number',
+            StringValue: String(product.price),
+          },
+        },
       };
       return await sns.publish(params).promise();
     } catch (error) {
