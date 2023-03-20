@@ -10,10 +10,6 @@ describe("describe block first test", () => {
     .mockResolvedValue(null);
   jest.spyOn(snsService, "sendNotifyMessage");
 
-  // jest.spyOn(productService, 'createProduct')
-  //   .mockResolvedValue({} as TransactWriteItemsCommandOutput);
-  // jest.spyOn(snsClient, 'send');
-
   it("triggered with empty Records", () => {
     const event: SQSEvent = { Records: [] };
     catalogBatchProcess(event);
@@ -42,7 +38,6 @@ describe("describe block first test", () => {
 
     await catalogBatchProcess(event);
 
-    // expect(console.log).toBeCalledTimes(2); //to be coled twice for every record
     expect(console.log).toBeCalledWith(
       expect.objectContaining({ message: "NewProduct to be created" })
     );
