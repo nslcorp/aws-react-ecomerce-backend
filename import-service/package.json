@@ -6,7 +6,8 @@
   "scripts": {
     "start": "serverless offline",
     "deploy": "serverless deploy --verbose",
-    "deploy:importProductService": "serverless deploy -f importProductsFile  --verbose"
+    "deploy:importProductsFile": "serverless deploy -f importProductsFile  --verbose",
+    "deploy:importFileParser": "serverless deploy -f importFileParser  --verbose"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -16,7 +17,9 @@
     "@middy/http-cors": "^4.2.6",
     "@middy/http-json-body-parser": "^3.4.0",
     "aws-sdk": "^2.1330.0",
-    "csv-parse": "^5.3.6"
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.0.3",
+    "strip-bom-stream": "^5.0.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
