@@ -1,8 +1,12 @@
+import * as dotenv from 'dotenv'
+dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import serverlessExpress from '@vendia/serverless-express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import type { Callback, Context, Handler } from 'aws-lambda';
+
+
 
 
 const port = process.env.PORT || 4000;

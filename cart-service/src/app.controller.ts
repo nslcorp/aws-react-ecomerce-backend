@@ -19,7 +19,6 @@ export class AppController {
   async login(@Request() req) {
     const token = this.authService.login(req.user, 'basic');
 
-
     return  {
       statusCode: HttpStatus.OK,
       message: 'OK',
