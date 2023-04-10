@@ -28,6 +28,16 @@ create table if not exists cart_items (
 );
 
 
+DROP TABLE if exists products;
+create table if not exists products (
+   id uuid,
+   foreign key ("id") references "cart_items" ("product_id"),
+   title text not null,
+   description text not null,
+   price integer not null
+   );
+
+
 
 
 

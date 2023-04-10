@@ -49,44 +49,50 @@ export class CartService {
     return this.createByUserId(userId);
   }
 
-  async updateByUserId(
-    userId: string,
-    items: LegacyCartItem,
-  ): Promise<LegacyCart> {
-
-
-
+  async updateByUserId(userId: string, item: LegacyCartItem): Promise<any> {
     const { id, ...rest } = await this.findOrCreateByUserId(userId);
     const cart = await this.findOrCreateByUserId(userId);
     console.log('cart', cart);
 
-    let cartItem = cart.items.find(record => record.productId === items.product.id);
-    if(cartItem){
-      cartItem.count += items.count
-      console.log(cartItem);
-    }
-    else {
+    let cartItem = cart.items.find(
+      (record) => record.productId === item.product.id,
+    );
+    if (cartItem) {
+      if (item.count === 0) {
+        await this.cartItemRepository.remove(cartItem);
+      }
+
+      cartItem.count += item.count;
+      await this.cartItemRepository.save(cartItem);
+    } else {
       cartItem = new CartItem();
       cartItem.cartId = cart.id;
-      cartItem.productId = items.product.id;
-      cartItem.count = items.count
-    }
+      cartItem.productId = item.product.id;
+      cartItem.count = item.count;
 
-    const updatedCart = {
-      ...cart,
-      items: [...cart.items, cartItem],
-    };
-    const cartResponse = await this.cartRepository.save(updatedCart);
-    console.log('cartResponse', cartResponse);
+      const product = new Product();
+      product.id = item.product.id
+      product.title = item.product.title;
+      product.description = item.product.description;
+      product.price = item.product.price;
+      await this.productRepository.save(product);
+
+      cartItem.product = product
+
+      const updatedCart = {
+        ...cart,
+        items: [...cart.items, cartItem],
+      };
+      const cartResponse = await this.cartRepository.save(updatedCart);
+      console.log('cartResponse', cartResponse);
+    }
 
     const updatedItems = await this.cartItemRepository.find({
       where: { cartId: id },
       relations: ['product'],
     });
 
-    console.log(updatedItems);
-
-    return cartResponse;
+    return updatedItems;
   }
 
   removeByUserId(userId): void {
