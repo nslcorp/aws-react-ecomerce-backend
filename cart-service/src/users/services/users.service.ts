@@ -14,7 +14,6 @@ export class UsersService {
 
   async findOne(name: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { name } });
-    console.log("findOne", user);
     return user;
   }
 
