@@ -71,13 +71,13 @@ export class CartService {
       cartItem.count = item.count;
 
       const product = new Product();
-      product.id = item.product.id
+      product.id = item.product.id;
       product.title = item.product.title;
       product.description = item.product.description;
       product.price = item.product.price;
       await this.productRepository.save(product);
 
-      cartItem.product = product
+      cartItem.product = product;
 
       const updatedCart = {
         ...cart,
@@ -95,7 +95,10 @@ export class CartService {
     return updatedItems;
   }
 
-  removeByUserId(userId): void {
-    this.userCarts[userId] = null;
+  async removeByUserId(userId): Promise<void> {
+    const cart = await this.cartRepository.findOne({ userId });
+
+    await this.cartItemRepository.delete({ cart });
+    await this.cartRepository.delete({ userId });
   }
 }

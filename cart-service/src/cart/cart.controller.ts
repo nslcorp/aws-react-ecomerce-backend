@@ -1,10 +1,6 @@
-import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus } from '@nestjs/common';
-
-// import { BasicAuthGuard, JwtAuthGuard } from '../auth';
+import { Controller, Get, Delete, Put, Body, Req, UseGuards, HttpStatus } from '@nestjs/common';
 import { OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
-
-import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 import { BasicAuthGuard } from "../auth";
 
@@ -15,33 +11,41 @@ export class CartController {
     private orderService: OrderService
   ) { }
 
-  // @UseGuards(JwtAuthGuard)
   @UseGuards(BasicAuthGuard)
   @Get()
   async findUserCart(@Req() req: AppRequest) {
     const userID = getUserIdFromRequest(req);
+    console.log("Get", userID);
     const cart = await this.cartService.findOrCreateByUserId(userID);
     console.log('findUserCart', cart);
 
     return cart.items
   }
 
-  // @UseGuards(JwtAuthGuard)
   @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) {
-    // TODO: validate body payload...
+    // TODO: change to better validation ...
+    const {product, count } = body;
+    if(typeof count !== "number" || !product){
+      return {
+        statusCode: 400,
+        message: 'Validation Error',
+      }
+    }
+
     const userID = getUserIdFromRequest(req);
     const cart = await this.cartService.updateByUserId(userID, body)
 
     return cart
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @UseGuards(BasicAuthGuard)
+  @UseGuards(BasicAuthGuard)
   @Delete()
-  clearUserCart(@Req() req: AppRequest) {
-    this.cartService.removeByUserId(getUserIdFromRequest(req));
+  async clearUserCart(@Req() req: AppRequest) {
+    const userID = getUserIdFromRequest(req);
+    console.log("Delete", userID);
+    await this.cartService.removeByUserId(userID);
 
     return {
       statusCode: HttpStatus.OK,
@@ -49,38 +53,37 @@ export class CartController {
     }
   }
 
-  // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
-  @Post('checkout')
-  async checkout(@Req() req: AppRequest, @Body() body) {
-    const userId = getUserIdFromRequest(req);
-    const cart = await this.cartService.findByUserId(userId);
-
-    if (!(cart && cart.items.length)) {
-      const statusCode = HttpStatus.BAD_REQUEST;
-      req.statusCode = statusCode
-
-      return {
-        statusCode,
-        message: 'Cart is empty',
-      }
-    }
-
-    const { id: cartId, items } = cart;
-    const total = calculateCartTotal(cart);
-    const order = this.orderService.create({
-      ...body, // TODO: validate and pick only necessary data
-      userId,
-      cartId,
-      items,
-      total,
-    });
-    this.cartService.removeByUserId(userId);
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'OK',
-      data: { order }
-    }
-  }
+  // @Post('checkout')
+  // async checkout(@Req() req: AppRequest, @Body() body) {
+  //   const userId = getUserIdFromRequest(req);
+  //   const cart = await this.cartService.findByUserId(userId);
+  //
+  //   if (!(cart && cart.items.length)) {
+  //     const statusCode = HttpStatus.BAD_REQUEST;
+  //     req.statusCode = statusCode
+  //
+  //     return {
+  //       statusCode,
+  //       message: 'Cart is empty',
+  //     }
+  //   }
+  //
+  //   const { id: cartId, items } = cart;
+  //   const total = calculateCartTotal(cart);
+  //   const order = this.orderService.create({
+  //     ...body, // TODO: validate and pick only necessary data
+  //     userId,
+  //     cartId,
+  //     items,
+  //     total,
+  //   });
+  //   await this.cartService.removeByUserId(userId);
+  //
+  //   return {
+  //     statusCode: HttpStatus.OK,
+  //     message: 'OK',
+  //     data: { order }
+  //   }
+  // }
 }
