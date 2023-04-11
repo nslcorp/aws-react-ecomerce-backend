@@ -63,7 +63,7 @@ export class CartService {
         await this.cartItemRepository.remove(cartItem);
       }
 
-      cartItem.count += item.count;
+      cartItem.count = item.count;
       await this.cartItemRepository.save(cartItem);
     } else {
       const product = new Product();
