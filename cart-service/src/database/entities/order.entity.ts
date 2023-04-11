@@ -25,15 +25,15 @@ export class Order {
 
   @Column({ type: 'jsonb' })
   payment: {
-    type: string,
-    address?: any,
     creditCard?: any,
   };
 
   @Column({ type: 'jsonb' })
   delivery: {
-    type: string,
-    address: any,
+    firstName: string,
+    lastName: string
+    address: string,
+    comment?: string,
   };
 
   @Column({ type: 'text' })

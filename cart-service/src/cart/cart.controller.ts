@@ -1,54 +1,60 @@
-import { Controller, Get, Delete, Put, Body, Req, UseGuards, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Delete,
+  Put,
+  Body,
+  Req,
+  UseGuards,
+  HttpStatus,
+} from '@nestjs/common';
 import { AppRequest, getUserIdFromRequest } from '../shared';
 import { CartService } from './services';
-import { BasicAuthGuard } from "../auth";
+import { BasicAuthGuard } from '../auth';
 
 @Controller('api/profile/cart')
 export class CartController {
-  constructor(
-    private cartService: CartService,
-  ) { }
+  constructor(private cartService: CartService) {}
 
   @UseGuards(BasicAuthGuard)
   @Get()
   async findUserCart(@Req() req: AppRequest) {
     const userID = getUserIdFromRequest(req);
-    console.log("Get", userID);
     const cart = await this.cartService.findOrCreateByUserId(userID);
-    console.log('findUserCart', cart);
+    console.log('GET::findUserCart::cart', cart);
 
-    return cart.items
+    return cart.items;
   }
 
   @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) {
     // TODO: change to better validation ...
-    const {product, count } = body;
-    if(typeof count !== "number" || !product){
+    const { product, count } = body;
+    if (typeof count !== 'number' || !product) {
       return {
         statusCode: 400,
         message: 'Validation Error',
-      }
+      };
     }
 
     const userID = getUserIdFromRequest(req);
-    const cart = await this.cartService.updateByUserId(userID, body)
+    const cart = await this.cartService.updateByUserId(userID, body);
 
-    return cart
+    return cart;
   }
 
   @UseGuards(BasicAuthGuard)
   @Delete()
   async clearUserCart(@Req() req: AppRequest) {
     const userID = getUserIdFromRequest(req);
-    console.log("Delete", userID);
+    console.log('Delete', userID);
     await this.cartService.removeByUserId(userID);
 
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
-    }
+    };
   }
 
   // @UseGuards(BasicAuthGuard)

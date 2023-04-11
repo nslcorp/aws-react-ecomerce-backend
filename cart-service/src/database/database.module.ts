@@ -5,6 +5,7 @@ import { Cart } from './entities/cart.entity';
 import { CartItem } from './entities/cart-item.entity';
 import { User } from './entities/user.entity';
 import { Product } from "./entities/product.entity";
+import { Order } from "./entities/order.entity";
 
 
 @Module({
@@ -20,7 +21,7 @@ import { Product } from "./entities/product.entity";
       logging: false,
       namingStrategy: new SnakeNamingStrategy(),
     }),
-    TypeOrmModule.forFeature([Cart, CartItem, User, Product]),
+    TypeOrmModule.forFeature([Cart, CartItem, User, Product, Order]),
   ],
   exports: [TypeOrmModule],
 })

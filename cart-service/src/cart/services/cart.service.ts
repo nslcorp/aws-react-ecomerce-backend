@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { v4 } from 'uuid';
-
-import { Cart as LegacyCart, CartItem as LegacyCartItem } from '../models';
+import { CartItem as LegacyCartItem } from '../models';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Cart, CartStatus } from '../../database/entities/cart.entity';
@@ -11,8 +9,6 @@ import { Product } from '../../database/entities/product.entity';
 
 @Injectable()
 export class CartService {
-  private userCarts: Record<string, LegacyCart> = {};
-
   constructor(
     @InjectRepository(Cart)
     private readonly cartRepository: Repository<Cart>,
@@ -98,11 +94,10 @@ export class CartService {
     const pResponse = await this.productRepository.delete({
       id: In(productIDs),
     });
-    console.log(pResponse);
 
-    const ciResponse = await this.cartItemRepository.delete({ cart });
-    console.log(ciResponse);
-    const cartDeleteResult = await this.cartRepository.delete({ userId });
-    console.log(cartDeleteResult);
+    const cartItemDeleteResponse = await this.cartItemRepository.delete({ cart });
+    console.log("cart::removeByUserId::cartItemDeleteResponse", cartItemDeleteResponse);
+    const cartDeleteResponse = await this.cartRepository.delete({ userId });
+    console.log("cart::removeByUserId::cartDeleteResponse", cartDeleteResponse);
   }
 }

@@ -1,19 +1,13 @@
-// import { CartItem } from '../../cart/models';
 
-export type Order = {
-  id?: string,
-  userId: string;
-  cartId: string;
-  // items: CartItem[]
-  delivery: {
-    firstName: string,
-    lastName: string
-    address: string,
-    comment?: string,
-  },
-  payment: {
-    creditCard: string,
-  },
-  status: string;
+export interface Address {
+  firstName: string;
+  lastName: string;
+  address: string;
+  comment?: string;
+}
+
+export interface OrderPayload {
+  address: Address;
+  items: { productId: string; count: number };
   total: number;
 }
