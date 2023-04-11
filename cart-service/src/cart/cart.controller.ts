@@ -1,5 +1,4 @@
 import { Controller, Get, Delete, Put, Body, Req, UseGuards, HttpStatus } from '@nestjs/common';
-import { OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
 import { CartService } from './services';
 import { BasicAuthGuard } from "../auth";
@@ -8,7 +7,6 @@ import { BasicAuthGuard } from "../auth";
 export class CartController {
   constructor(
     private cartService: CartService,
-    private orderService: OrderService
   ) { }
 
   @UseGuards(BasicAuthGuard)

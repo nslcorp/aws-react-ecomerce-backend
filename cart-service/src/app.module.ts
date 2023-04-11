@@ -12,7 +12,7 @@ import { DatabaseModule } from "./database/database.module";
     AuthModule,
     CartModule,
     OrderModule,
-    DatabaseModule
+    DatabaseModule,
   ],
   controllers: [
     AppController,
