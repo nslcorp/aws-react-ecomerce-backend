@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 
 import { Cart as LegacyCart, CartItem as LegacyCartItem } from '../models';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Cart, CartStatus } from '../../database/entities/cart.entity';
 import { CartItem } from '../../database/entities/cart-item.entity';
 import { Product } from '../../database/entities/product.entity';
@@ -35,6 +35,7 @@ export class CartService {
     cart.createdAt = new Date();
     cart.updatedAt = new Date();
     cart.status = CartStatus.OPEN;
+    cart.items = [];
 
     return this.cartRepository.save(cart);
   }
@@ -65,11 +66,6 @@ export class CartService {
       cartItem.count += item.count;
       await this.cartItemRepository.save(cartItem);
     } else {
-      cartItem = new CartItem();
-      cartItem.cartId = cart.id;
-      cartItem.productId = item.product.id;
-      cartItem.count = item.count;
-
       const product = new Product();
       product.id = item.product.id;
       product.title = item.product.title;
@@ -77,14 +73,13 @@ export class CartService {
       product.price = item.product.price;
       await this.productRepository.save(product);
 
+      cartItem = new CartItem();
+      cartItem.cartId = cart.id;
+      cartItem.productId = item.product.id;
+      cartItem.count = item.count;
       cartItem.product = product;
 
-      const updatedCart = {
-        ...cart,
-        items: [...cart.items, cartItem],
-      };
-      const cartResponse = await this.cartRepository.save(updatedCart);
-      console.log('cartResponse', cartResponse);
+      await this.cartItemRepository.save(cartItem);
     }
 
     const updatedItems = await this.cartItemRepository.find({
@@ -97,8 +92,17 @@ export class CartService {
 
   async removeByUserId(userId): Promise<void> {
     const cart = await this.cartRepository.findOne({ userId });
+    const cartItem = await this.cartItemRepository.find({ cartId: cart.id });
+    const productIDs = cartItem.map((record) => record.productId);
 
-    await this.cartItemRepository.delete({ cart });
-    await this.cartRepository.delete({ userId });
+    const pResponse = await this.productRepository.delete({
+      id: In(productIDs),
+    });
+    console.log(pResponse);
+
+    const ciResponse = await this.cartItemRepository.delete({ cart });
+    console.log(ciResponse);
+    const cartDeleteResult = await this.cartRepository.delete({ userId });
+    console.log(cartDeleteResult);
   }
 }
