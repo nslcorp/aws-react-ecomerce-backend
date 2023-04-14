@@ -8,6 +8,6 @@ export interface Address {
 
 export interface OrderPayload {
   address: Address;
-  items: { productId: string; count: number };
+  // items: { productId: string; count: number };
   total: number;
 }

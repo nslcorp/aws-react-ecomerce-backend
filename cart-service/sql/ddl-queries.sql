@@ -15,11 +15,12 @@ create table if not exists carts (
    id uuid primary key default uuid_generate_v4(),
    user_id uuid default uuid_generate_v4(),
    created_at date not null,
+   updated_at date not null,
    status status_enum
 );
 
 -- Cart_Item
-DROP TABLE if exists cart_items
+DROP TABLE if exists cart_items;
 create table if not exists cart_items (
    cart_id uuid,
    foreign key ("cart_id") references "carts" ("id"),
@@ -31,7 +32,6 @@ create table if not exists cart_items (
 DROP TABLE if exists products;
 create table if not exists products (
    id uuid,
-   foreign key ("id") references "cart_items" ("product_id"),
    title text not null,
    description text not null,
    price integer not null

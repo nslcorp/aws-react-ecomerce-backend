@@ -27,11 +27,11 @@ export class OrderController {
   @Put()
   async create(@Req() req: AppRequest, @Body() body) {
     const userId = getUserIdFromRequest(req);
-    const { address, items } = body as OrderPayload;
+    const { address } = body as OrderPayload;
 
-    if (!address || !items) {
+    if (!address) {
       throw new HttpException(
-        'Validation Error. Expected request: { body: {address : {...}, items: [...] }',
+        'Validation Error. Expected request: { body: {address : {...} }',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }

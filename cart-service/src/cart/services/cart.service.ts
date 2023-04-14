@@ -47,7 +47,6 @@ export class CartService {
   }
 
   async updateByUserId(userId: string, item: LegacyCartItem): Promise<any> {
-    const { id, ...rest } = await this.findOrCreateByUserId(userId);
     const cart = await this.findOrCreateByUserId(userId);
     console.log('cart', cart);
 
@@ -57,6 +56,7 @@ export class CartService {
     if (cartItem) {
       if (item.count === 0) {
         await this.cartItemRepository.remove(cartItem);
+        return;
       }
 
       cartItem.count = item.count;
@@ -79,7 +79,7 @@ export class CartService {
     }
 
     const updatedItems = await this.cartItemRepository.find({
-      where: { cartId: id },
+      where: { cartId: cart.id },
       relations: ['product'],
     });
 
@@ -88,15 +88,10 @@ export class CartService {
 
   async removeByUserId(userId): Promise<void> {
     const cart = await this.cartRepository.findOne({ userId });
-    const cartItem = await this.cartItemRepository.find({ cartId: cart.id });
-    const productIDs = cartItem.map((record) => record.productId);
-
-    const pResponse = await this.productRepository.delete({
-      id: In(productIDs),
-    });
 
     const cartItemDeleteResponse = await this.cartItemRepository.delete({ cart });
     console.log("cart::removeByUserId::cartItemDeleteResponse", cartItemDeleteResponse);
+
     const cartDeleteResponse = await this.cartRepository.delete({ userId });
     console.log("cart::removeByUserId::cartDeleteResponse", cartDeleteResponse);
   }
