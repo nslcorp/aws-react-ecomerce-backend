@@ -1,0 +1,16 @@
+# Explanation:
+# ignore folders that rerpesent local build artifacts
+dist
+node_modules
+.git
+.cache
+.elasticbeanstalk
+.esbuild
+.serverless
+
+# Ignore files
+*.md
+.env
+.aws
+npm-debug.log
+.prettierrc
