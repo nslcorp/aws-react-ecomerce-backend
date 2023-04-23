@@ -41,7 +41,7 @@ const serverlessConfiguration: AWS = {
       BUCKET_NAME: 'book-shop-import-service-bucket',
       UPLOAD_FOLDER: 'uploaded',
       PARSED_FOLDER: 'parsed',
-      SQS_URL: '${env:SQS_URL}',
+      SQS_URL: '${.env:SQS_URL}',
     },
     iamRoleStatements: [
       {
@@ -57,7 +57,7 @@ const serverlessConfiguration: AWS = {
       {
         Effect: 'Allow',
         Action: 'sqs:*',
-        Resource: '${env:SQS_ARN}',
+        Resource: '${.env:SQS_ARN}',
       },
     ],
   },

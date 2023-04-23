@@ -45,8 +45,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
-      TABLE_PRODUCTS: "${env:TABLE_PRODUCTS}",
-      TABLE_STOCKS: "${env:TABLE_STOCKS}",
+      TABLE_PRODUCTS: "${.env:TABLE_PRODUCTS}",
+      TABLE_STOCKS: "${.env:TABLE_STOCKS}",
       SNS_TOPIC_ARN: { Ref: "createProductTopic" },
     },
     iam: {
@@ -95,7 +95,7 @@ const serverlessConfiguration: AWS = {
       createProductSubscription: {
         Type: "AWS::SNS::Subscription",
         Properties: {
-          Endpoint: "${env:EMAIL_USER_TO_BE_NOTIFIED_1}",
+          Endpoint: "${.env:EMAIL_USER_TO_BE_NOTIFIED_1}",
           Protocol: "email",
           TopicArn: { Ref: "createProductTopic" },
         },
@@ -103,7 +103,7 @@ const serverlessConfiguration: AWS = {
       createProductSubscriptionLowPrice: {
         Type: "AWS::SNS::Subscription",
         Properties: {
-          Endpoint: "${env:EMAIL_USER_TO_BE_NOTIFIED_2}",
+          Endpoint: "${.env:EMAIL_USER_TO_BE_NOTIFIED_2}",
           Protocol: "email",
           TopicArn: { Ref: "createProductTopic" },
           FilterPolicy: {

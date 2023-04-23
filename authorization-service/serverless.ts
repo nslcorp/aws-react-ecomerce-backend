@@ -18,8 +18,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      nslcorp: "${env:nslcorp}", // Username that Allow authorisation
-      admin: "${env:admin}"      // Username that Allow authorisation
+      nslcorp: "${.env:nslcorp}", // Username that Allow authorisation
+      admin: "${.env:admin}"      // Username that Allow authorisation
     },
   },
   // import the function via paths
