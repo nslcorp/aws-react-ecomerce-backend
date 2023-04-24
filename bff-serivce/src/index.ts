@@ -1,63 +1,51 @@
-import express, { Express, NextFunction, Request, Response } from "express";
-import dotenv from "dotenv";
-import bodyParser from "body-parser";
-import cors from "cors";
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { generateUndefinedRecipientMessage } from "./config";
-import { validateRootRequest } from "./handlers/validateRootRequest/validateRootRequest";
-import { getRecipientUrl } from "./handlers/getRecipientServiceURL/getRecipientServiceURL";
-
-// import type {Request, Response} from 'express'
-
+import dotenv from 'dotenv';
 dotenv.config();
+import express, { Express, NextFunction, Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import NodeCache from 'node-cache';
+import { validateRootRequest } from './handlers/validateRootRequest/validateRootRequest';
+import { validateUnknownRecipient } from './handlers/validateUnknownRecipient/validateUnknownRecipient';
+import { doRequest } from './handlers/doRequest/doRequest';
+import { sendResponse } from './handlers/sendResponse/sendResponse';
+
+const appCache = new NodeCache({ checkperiod: 120 });
 
 const app: Express = express();
 app.use(bodyParser.json());
 app.use(cors());
 const port = process.env.PORT || 3000;
 
-app.all("/*", async (req: Request, res: Response, next: NextFunction) => {
+app.all('/*', async (req: Request, res: Response, next: NextFunction) => {
   // const recipientName = req.params.recipient.toLowerCase();
 
   validateRootRequest(req.originalUrl, res, next);
 
-  // url: '/'  ==> serviceName: ""
-  // url: '/abc'  ==> serviceName: "abc"
-  const serviceName = req.originalUrl.split("/")[1];
+  const serviceName = req.originalUrl.split('/')[1];
   const baseRecipientUrl = process.env[serviceName];
-  const message = generateUndefinedRecipientMessage(serviceName);
-  if (!baseRecipientUrl) {
-    return res.status(502).send(message);
-  }
+  validateUnknownRecipient(baseRecipientUrl, serviceName, res, next);
 
-  console.log(req.headers);
+  // specific request logic comes here
+  if (serviceName === 'products' && req.originalUrl === '/products') {
+    const key = [req.method, req.originalUrl].join('');
+    const cachedResponse = appCache.get(key);
 
-  const axiosConfig: AxiosRequestConfig = {
-    method: req.method,
-    // Unable to forward all headers
-    // ==> AxiosError: write EPROTO 8621808448:error:14094410:SSL routines:ssl3_read_bytes:sslv3 alert handshake
-    headers: {
-      ...(req.headers.authorization && {
-        Authorization: req.headers.authorization,
-      }),
-    },
-    url: getRecipientUrl(serviceName, baseRecipientUrl, req.originalUrl),
-    ...(Object.keys(req.body || {}).length > 0 && { data: req.body }),
-  };
-  console.log(axiosConfig);
-
-  try {
-    const response = await axios(axiosConfig);
-    res.json(response.data);
-  } catch (error: any) {
-    if (!error.response) {
-      console.error(error);
-      return res
-        .status(500)
-        .send("Unprocessed backend error. See details in log.");
+    if (cachedResponse) {
+      sendResponse({ status: 200, data: cachedResponse }, res, next);
+      console.log('[Cache] response from cache');
+      return;
     }
-    return res.status(error.response.status).json(error.response.data);
+    const response = await doRequest(serviceName, baseRecipientUrl!, req, res, next);
+    appCache.set(key, response, 2 * 60);
+    console.log(`[Cache] response "${key}" was to cache at: ${new Date().toISOString()}`);
+
+    sendResponse({ status: 200, data: response }, res, next);
+    return;
   }
+
+  const response = await doRequest(serviceName, baseRecipientUrl!, req, res, next);
+  sendResponse({ status: 200, data: response }, res, next);
+  return;
 });
 
 app.listen(port, () => {

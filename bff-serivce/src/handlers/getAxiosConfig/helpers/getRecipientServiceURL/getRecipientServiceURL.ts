@@ -8,7 +8,6 @@ export const getRecipientUrl = (
   }
   if (serviceName === "cart") {
     const suffixUrl = originalUrl.replace('/cart', "")
-    console.log(suffixUrl);
     return `${baseRecipientUrl}${suffixUrl}`;
   }
 
