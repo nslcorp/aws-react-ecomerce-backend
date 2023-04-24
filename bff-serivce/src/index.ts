@@ -15,18 +15,34 @@ const port = process.env.PORT || 3000;
 
 app.all("/*", async (req, res) => {
   // const recipientName = req.params.recipient.toLowerCase();
-  const url = req.originalUrl;
-  console.log(req.originalUrl);
-  console.log(req.params);
-  console.log(req.query);
 
-  console.log(req.body);
-  console.log(req.method);
+  if (req.originalUrl === "/") {
+    res.send(`Welcome to BFF service. 
+    You just requested root route '/' and ... it looks it doesn't add up. 
+    Please use /products or /carts routes to use the power off BFF `);
+  }
+
+  // url: '/'  ==> serviceName: ""
+  // url: '/abc'  ==> serviceName: "abc"
+  const serviceName = req.originalUrl.split("/")[1];
+  const recipientService = process.env[serviceName];
+  if (!recipientService) {
+    return res
+      .status(502)
+      .send(
+        `Cannot process requests. 
+        Details: bff can not find recipient url for '${serviceName} service'. Please check env variables.`
+      );
+  }
 
   const axiosConfig: AxiosRequestConfig = {
     method: req.method,
+    // headers: req.headers,
     ...(Object.keys(req.body || {}).length > 0 && { data: req.body }),
   };
+
+  console.log(req.originalUrl, req.originalUrl.split("/"));
+  // console.log(serviceUrl);
 
   if (req.originalUrl.startsWith("/products")) {
     const baseURL = process.env.PRODUCT_SERVICE_URL;
@@ -42,10 +58,9 @@ app.all("/*", async (req, res) => {
 
   try {
     const response = await axios(axiosConfig);
-    console.log(response);
     res.json(response.data);
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
     console.log(error.message);
     res.status(400).json(error);
   }
